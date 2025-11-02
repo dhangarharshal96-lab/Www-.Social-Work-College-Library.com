@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>भगिनी मंडळ समाजकार्य महाविद्यालय, चोपडा - ग्रंथालय</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      background: linear-gradient(180deg, #fdfbfb 0%, #ebedee 100%);
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      padding: 30px 10px;
+      position: relative;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      animation: glow 2s infinite alternate;
+    }
+
+    header h2 {
+      font-size: 2.2rem;
+      color: #ffea00;
+      animation: slideIn 2s ease-in-out;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff; }
+      to { text-shadow: 0 0 25px #ffb6c1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .flower {
+      position: fixed;
+      top: -50px;
+      animation: fall 6s linear infinite;
+      font-size: 2rem;
+      z-index: 5;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    section {
+      padding: 20px;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      color: #4b0082;
+      margin-bottom: 20px;
+    }
+
+    .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .photo-box {
+      width: 250px;
+      height: 320px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      padding-top: 10px;
+    }
+
+    .photo-box img {
+      width: 90%;
+      height: 70%;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    }
+
+    input[type="text"] {
+      margin-top: 6px;
+      padding: 5px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      background: #6a11cb;
+      color: white;
+      padding: 10px;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌸 भगिनी मंडळ संचालित समाजकार्य महाविद्यालय, चोपडा 🌸</h1>
+    <h2>📚 ग्रंथालय</h2>
+  </header>
+
+  <section>
+    <h3>सदस्यांचे फोटो</h3>
+    <div class="photo-grid">
+      <div class="photo-box" id="box1"></div>
+      <div class="photo-box" id="box2"></div>
+      <div class="photo-box" id="box3"></div>
+    </div>
+  </section>
+
+  <footer>© भगिनी मंडळ समाजकार्य महाविद्यालय, चोपडा</footer>
+
+  <script>
+    // फुलांचा पाऊस animation
+    const flowers = ["🌸", "🌷", "🌺", "🌻", "💮"];
+    for (let i = 0; i < 25; i++) {
+      const f = document.createElement("div");
+      f.className = "flower";
+      f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      f.style.left = Math.random() * 100 + "vw";
+      f.style.animationDuration = 3 + Math.random() * 5 + "s";
+      document.body.appendChild(f);
+    }
+
+    // फोटो upload
+    function uploadPhoto(event, boxNum) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        localStorage.setItem("photo" + boxNum, e.target.result);
+        showPhotos();
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // फोटो delete
+    function deletePhoto(boxNum) {
+      localStorage.removeItem("photo" + boxNum);
+      showPhotos();
+    }
+
+    // नाव save
+    function saveName(boxNum) {
+      const nameValue = document.getElementById("name" + boxNum).value.trim();
+      localStorage.setItem("name" + boxNum, nameValue);
+    }
+
+    // नाव delete
+    function deleteName(boxNum) {
+      localStorage.removeItem("name" + boxNum);
+      document.getElementById("name" + boxNum).value = "";
+    }
+
+    // फोटो व नाव दाखवा
+    function showPhotos() {
+      for (let i = 1; i <= 3; i++) {
+        const box = document.getElementById("box" + i);
+        const photo = localStorage.getItem("photo" + i);
+        const name = localStorage.getItem("name" + i) || "";
+
+        if (photo) {
+          box.innerHTML = `
+            <img src="${photo}">
+            <div class="buttons">
+              <input type="file" accept="image/*" onchange="uploadPhoto(event, ${i})">
+              <button onclick="deletePhoto(${i})">❌ फोटो</button>
+            </div>
+            <input type="text" id="name${i}" value="${name}" placeholder="नाव लिहा" oninput="saveName(${i})">
+            <button onclick="deleteName(${i})">❌ नाव काढा</button>
+          `;
+        } else {
+          box.innerHTML = `
+            <p>फोटो ${i} जोडा</p>
+            <div class="buttons">
+              <input type="file" accept="image/*" onchange="uploadPhoto(event, ${i})">
+              <button onclick="deletePhoto(${i})">❌ फोटो</button>
+            </div>
+            <input type="text" id="name${i}" value="${name}" placeholder="नाव लिहा" oninput="saveName(${i})">
+            <button onclick="deleteName(${i})">❌ नाव काढा</button>
+          `;
+        }
+      }
+    }
+
+    // सुरुवातीला लोड करा
+    showPhotos();
+  </script>
+</body>
+</html
